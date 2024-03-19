@@ -5,12 +5,12 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ExplorePage from "./pages/ExplorePage";
 import LikesPage from "./pages/LikesPage";
-import SliderBar from "./components/Sliderbar";
+import Sidebar from "./components/Sidebar";
 
 function App() {
   return (
     <div className="flex text-white">
-      <SliderBar />
+      <Sidebar />
       <div className="max-w-5xl my-5 mx-auto transition-all duration-300 flex-1">
         <Routes>
           <Route path="/" element={<Homepage />} />
