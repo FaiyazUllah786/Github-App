@@ -5,24 +5,26 @@ import { IoLocationOutline } from "react-icons/io5";
 import { FaXTwitter } from "react-icons/fa6";
 import { RiUserFollowLine } from "react-icons/ri";
 import { RiGitRepositoryFill } from "react-icons/ri";
+import { formatMemberSince } from "../utils/functions";
 
-const ProfileInfo = () => {
-  const userProfile = {
-    avatar_url:
-      "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745",
-    bio: "👨🏻‍💻👨🏻‍💻👨🏻‍💻",
-    email: "johndoe@gmail.com",
-    followers: 100,
-    following: 200,
-    html_url: "https://github.com/burakorkmez",
-    location: "Somewhere, Earth",
-    name: "John Doe",
-    public_gists: 100,
-    public_repos: 100,
-    twitter_username: "johndoe",
-    login: "johndoe",
-  };
+const ProfileInfo = ({ userProfile }) => {
+  // const userProfile = {
+  //   avatar_url:
+  //     "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745",
+  //   bio: "👨🏻‍💻👨🏻‍💻👨🏻‍💻",
+  //   email: "johndoe@gmail.com",
+  //   followers: 100,
+  //   following: 200,
+  //   html_url: "https://github.com/burakorkmez",
+  //   location: "Somewhere, Earth",
+  //   name: "John Doe",
+  //   public_gists: 100,
+  //   public_repos: 100,
+  //   twitter_username: "johndoe",
+  //   login: "johndoe",
+  // };
 
+  const memberSince = formatMemberSince(userProfile?.created_at);
   return (
     <div className="flex flex-col gap-2 lg:w-1/3 md:sticky md:top-10">
       <div className="rounded-lg bg-glass p-4">
@@ -36,7 +38,7 @@ const ProfileInfo = () => {
           </a>
           <div className="flex gap-2 items-center flex-col">
             <a
-              href={userProfile.html_url}
+              href={userProfile?.html_url}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2 bg-glass font-medium w-full text-sm p-2 rounded-lg cursor-pointer border border-blue-400"
@@ -71,7 +73,7 @@ const ProfileInfo = () => {
         ) : null}
         <div className="my-2">
           <p className="text-gray-600 font-bold text-sm">Member since</p>
-          <p>23 Sep, 2023</p>
+          <p>{memberSince}</p>
         </div>
         <div className="my-2">
           <p className="text-gray-600 font-bold text-sm">Full Name</p>
@@ -79,12 +81,14 @@ const ProfileInfo = () => {
         </div>
         <div className="my-2">
           <p className="text-gray-600 font-bold text-sm">Username</p>
-          <p>{userProfile.login}</p>
+          <p>{userProfile?.login}</p>
         </div>
-        <div className="my-2">
-          <p className="text-gray-600 font-bold text-sm">E-mail Address</p>
-          <p>{userProfile.email}</p>
-        </div>
+        {userProfile?.email && (
+          <div className="my-2">
+            <p className="text-gray-600 font-bold text-sm">E-mail Address</p>
+            <p>{userProfile?.email}</p>
+          </div>
+        )}
       </div>
       <div className="flex flex-wrap mx-4 gap-2">
         {/* Follower Count */}
