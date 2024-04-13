@@ -14,40 +14,61 @@ const HomePage = () => {
 
   const [sortType, setSortType] = useState("forks");
 
-  const getUserProfileAndRepos = useCallback(async () => {
-    setLoading(true);
-    try {
-      const userRes = await fetch(
-        "https://api.github.com/users/faiyazullah786"
-      );
-      const userProfile = await userRes.json();
-      setUserProfile(userProfile);
+  const getUserProfileAndRepos = useCallback(
+    async (username = "faiyazullah786") => {
+      setLoading(true);
+      try {
+        const userRes = await fetch(`https://api.github.com/users/${username}`);
+        const userProfile = await userRes.json();
+        setUserProfile(userProfile);
 
-      const repoRes = await fetch(userProfile.repos_url);
-      const repos = await repoRes.json();
-      setRepos(repos);
+        const repoRes = await fetch(userProfile.repos_url);
+        const repos = await repoRes.json();
+        setRepos(repos);
 
-      console.log("userProfile:", userProfile);
-      console.log("repos:", repos);
-    } catch (error) {
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        console.log("userProfile:", userProfile);
+        console.log("repos:", repos);
+        return { userProfile, repos };
+      } catch (error) {
+        toast.error(`something went Wrong`);
+        setUserProfile(null);
+        setRepos([]);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     getUserProfileAndRepos();
   }, [getUserProfileAndRepos]);
 
+  const onSearch = async (e, username) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      setUserProfile(null);
+      setRepos([]);
+
+      const { userProfile, repos } = await getUserProfileAndRepos(username);
+      setUserProfile(userProfile);
+      setRepos(repos);
+    } catch (error) {
+      toast.error("Github profile not found!!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div className="m-4">
-        <Search />
+        <Search onSearch={onSearch} />
         <SortRepos />
         <div className="flex gap-4 flex-col lg:flex-row justify-center items-start">
           {userProfile && !loading && <ProfileInfo userProfile={userProfile} />}
-          {repos.length > 0 && !loading && <Repos repos={repos} />}
+          {!loading && <Repos repos={repos} />}
           {loading && <Spinner />}
         </div>
       </div>
