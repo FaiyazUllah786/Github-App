@@ -26,7 +26,7 @@ const ProfileInfo = ({ userProfile }) => {
 
   const memberSince = formatMemberSince(userProfile?.created_at);
   return (
-    <div className="flex flex-col gap-2 lg:w-1/3 md:sticky md:top-10">
+    <div className="flex flex-col gap-2 lg:w-1/3 lg:sticky md:top-10">
       <div className="rounded-lg bg-glass p-4">
         <div className="flex gap-3 items-center">
           <a href={userProfile?.html_url} target="_blank" rel="noreferrer">
