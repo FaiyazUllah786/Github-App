@@ -12,7 +12,7 @@ const HomePage = () => {
   const [repos, setRepos] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const [sortType, setSortType] = useState("forks");
+  const [sortType, setSortType] = useState("recent");
 
   const getUserProfileAndRepos = useCallback(
     async (username = "faiyazullah786") => {
@@ -24,6 +24,7 @@ const HomePage = () => {
 
         const repoRes = await fetch(userProfile.repos_url);
         const repos = await repoRes.json();
+        repos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         setRepos(repos);
 
         console.log("userProfile:", userProfile);
@@ -54,6 +55,7 @@ const HomePage = () => {
       const { userProfile, repos } = await getUserProfileAndRepos(username);
       setUserProfile(userProfile);
       setRepos(repos);
+      setSortType("recent");
     } catch (error) {
       toast.error("Github profile not found!!");
     } finally {
