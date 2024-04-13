@@ -4,8 +4,6 @@ import Repos from "../components/Repos";
 import Spinner from "../components/Spinner";
 
 const ExplorePage = () => {
-  // https://api.github.com/search/repositories?q=language:javascript&sort=stars&order=desc
-
   const [loading, setLoading] = useState(false);
   const [repos, setRepos] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState("");
@@ -15,7 +13,12 @@ const ExplorePage = () => {
     setRepos([]);
     try {
       const reposRes = await fetch(
-        `https://api.github.com/search/repositories?q=language:${language}&sort=stars&order=desc`
+        `https://api.github.com/search/repositories?q=language:${language}&sort=stars&order=desc`,
+        {
+          headers: {
+            authorization: `token ${import.meta.env.VITE_GITHUB_API_KEY}`,
+          },
+        }
       );
       const repos = await reposRes.json();
       setRepos(repos.items);
