@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import path from "path";
 
 import "./passport/github.auth.js";
 import passport from "passport";
@@ -15,6 +16,10 @@ dotenv.config({ path: ".env" });
 
 const app = express();
 
+const __dirname = path.resolve();
+
+console.log("__dirname", __dirname);
+
 app.use(cors());
 
 //initializing passport
@@ -24,15 +29,17 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res) => {
-  res.send("Serveris running");
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/explore", exploreRoutes);
 
-const PORT = process.env.PORT || 5000;
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+app.use("*", (req, res) => {
+  res.sendFile(__dirname, "frontend", "dist", "index.html");
+});
+
+const PORT = process.env.PORT;
 app.listen(
   PORT,
   () => console.log(`server is running on port: ${PORT}`),
