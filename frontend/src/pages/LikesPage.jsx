@@ -1,6 +1,26 @@
-import { FaHeart } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import LikeTable from "../components/LikeTable";
 
 const LikesPage = () => {
+  const [likes, setLikes] = useState([]);
+  useEffect(() => {
+    const getLike = async () => {
+      try {
+        const response = await fetch("/api/users/likes", {
+          credentials: "include",
+        });
+        const data = await response.json();
+        console.log(data);
+        if (data.error) throw new Error(data.error);
+        setLikes(data.likedBy);
+      } catch (error) {
+        toast.error("getLikes error" + error.message);
+      }
+    };
+    getLike();
+  }, []);
+  console.log(likes);
   return (
     <div className=" relative overflow-x-auto shadow-md px-4">
       <table className=" w-full rounded-lg text-sm text-left rtl:text-right  overflow-hidden">
@@ -21,35 +41,9 @@ const LikesPage = () => {
           </tr>
         </thead>
         <tbody>
-          <tr className="bg-glass">
-            <td className="w-4 p-4">
-              <div className="flex items-center">
-                <span>1</span>
-              </div>
-            </td>
-            <th
-              scope="row"
-              className="flex items-center px-6 py-4 whitespace-nowrap "
-            >
-              <img
-                className="w-10 h-10 rounded-full"
-                src={
-                  "https://ps.w.org/user-avatar-reloaded/assets/icon-256x256.png?rev=2540745"
-                }
-                alt="Jese image"
-              />
-              <div className="ps-3">
-                <div className="text-base font-semibold">dasdas</div>
-              </div>
-            </th>
-            <td className="px-6 py-4">das</td>
-            <td className="px-6 py-4">
-              <div className="flex items-center">
-                <FaHeart size={22} className="text-red-500 mx-2" />
-                Liked your profile
-              </div>
-            </td>
-          </tr>
+          {likes.map((user, idx) => (
+            <LikeTable key={user._id} user={user} idx={idx} />
+          ))}
         </tbody>
       </table>
     </div>
