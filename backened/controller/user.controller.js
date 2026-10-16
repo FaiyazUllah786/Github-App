@@ -2,7 +2,6 @@ import User from "../models/user.model.js";
 
 export const getUserProfileAndRepos = async (req, res) => {
   const { username } = req.params;
-  console.log(process.env.GITHUB_API_KEY);
   try {
     const userRes = await fetch(`https://api.github.com/users/${username}`, {
       headers: {
@@ -10,7 +9,6 @@ export const getUserProfileAndRepos = async (req, res) => {
       },
     });
     const userProfile = await userRes.json();
-    console.log("----userProfile",userProfile)
 
 
     const repoRes = await fetch(userProfile.repos_url, {
@@ -19,7 +17,6 @@ export const getUserProfileAndRepos = async (req, res) => {
       },
     });
     const repos = await repoRes.json();
-    console.log("----repos",repos)
 
     res.status(200).json({ userProfile, repos });
     return { userProfile, repos };

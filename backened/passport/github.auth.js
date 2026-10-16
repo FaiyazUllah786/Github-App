@@ -27,7 +27,6 @@ passport.use(
         "https://github-app-qpgf.onrender.com/api/auth/github/callback",
     },
     async function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
       const user = await User.findOne({ username: profile.username });
       if (!user) {
         const newUser = new User({

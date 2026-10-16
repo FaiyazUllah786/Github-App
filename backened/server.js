@@ -18,7 +18,6 @@ const app = express();
 
 const __dirname = path.resolve();
 
-console.log("__dirname", __dirname);
 
 app.use(cors());
 
