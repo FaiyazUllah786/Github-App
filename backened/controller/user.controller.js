@@ -10,6 +10,8 @@ export const getUserProfileAndRepos = async (req, res) => {
       },
     });
     const userProfile = await userRes.json();
+    console.log("----userProfile",userProfile)
+
 
     const repoRes = await fetch(userProfile.repos_url, {
       headers: {
@@ -17,6 +19,7 @@ export const getUserProfileAndRepos = async (req, res) => {
       },
     });
     const repos = await repoRes.json();
+    console.log("----repos",repos)
 
     res.status(200).json({ userProfile, repos });
     return { userProfile, repos };
